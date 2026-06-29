@@ -1,0 +1,9 @@
+{
+  "name": "shu-registry",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "registry:intake": "node scripts/registry-intake.mjs"
+  }
+}

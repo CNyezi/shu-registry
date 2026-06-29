@@ -1,0 +1,57 @@
+name: Validate submissions
+
+on:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 3 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  registry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Build registry from submissions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo '{"version":1,"plugins":[]}' > registry.json
+          for file in submissions/*.json; do
+            repo=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).repo)" "$file")
+            slug=${repo#https://github.com/}
+            asset=$(gh api "repos/$slug/releases/latest" --jq '.assets[] | select(.name | endswith(".pcp")) | .browser_download_url' | head -n 1)
+            test -n "$asset"
+            npm run registry:intake -- "$asset" registry.json
+          done
+      - name: Validate generated registry
+        run: |
+          node -e 'const r=require("./registry.json"); if (r.version !== 1 || !Array.isArray(r.plugins)) process.exit(1)'
+          cat registry.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: registry-json
+          path: registry.json
+      - name: Open update PR
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- registry.json; then
+            echo "registry.json is already current"
+            exit 0
+          fi
+          branch=bot/update-registry
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$branch"
+          git add registry.json
+          git commit -m "chore: update registry"
+          git push -f origin "$branch"
+          gh pr view "$branch" >/dev/null 2>&1 || gh pr create --title "chore: update registry" --body "Generated from submissions." --base main --head "$branch"
