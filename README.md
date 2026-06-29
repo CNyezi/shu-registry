@@ -2,6 +2,8 @@
 
 官方 registry 的最小仓库模板。
 
+当前官方仓库：https://github.com/CNyezi/shu-registry
+
 ## 作者提交插件
 
 在 `submissions/` 里新增一个 JSON 文件：
