@@ -26,4 +26,4 @@ PR 会运行 `validate-submissions.yml`：
 4. 运行 `npm run registry:intake -- <asset-url> registry.json`
 5. 校验并上传生成的 `registry.json` artifact
 
-维护者 review submission PR。合并后，定时或手动运行 workflow 会把最新生成的 `registry.json` 开成更新 PR。
+维护者 review submission PR。合并后，定时或手动运行 workflow 会把最新生成的 `registry.json` 提交回 `main`。

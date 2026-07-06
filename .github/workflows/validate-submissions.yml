@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 jobs:
   registry:
@@ -23,7 +22,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           shopt -s nullglob
-          echo '{"version":1,"plugins":[]}' > registry.json
+          printf '{\n  "version": 1,\n  "plugins": []\n}\n' > registry.json
           for file in submissions/*.json; do
             repo=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).repo)" "$file")
             slug=${repo#https://github.com/}
@@ -39,20 +38,15 @@ jobs:
         with:
           name: registry-json
           path: registry.json
-      - name: Open update PR
+      - name: Commit generated registry
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
           if git diff --quiet -- registry.json; then
             echo "registry.json is already current"
             exit 0
           fi
-          branch=bot/update-registry
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -B "$branch"
           git add registry.json
           git commit -m "chore: update registry"
-          git push -f origin "$branch"
-          gh pr view "$branch" >/dev/null 2>&1 || gh pr create --title "chore: update registry" --body "Generated from submissions." --base main --head "$branch"
+          git push origin main
