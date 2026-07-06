@@ -22,11 +22,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          shopt -s nullglob
           echo '{"version":1,"plugins":[]}' > registry.json
           for file in submissions/*.json; do
             repo=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).repo)" "$file")
             slug=${repo#https://github.com/}
-            asset=$(gh api "repos/$slug/releases/latest" --jq '.assets[] | select(.name | endswith(".pcp")) | .browser_download_url' | head -n 1)
+            asset=$(gh api "repos/$slug/releases/latest" --jq '[.assets[] | select(.name | endswith(".pcp")) | .browser_download_url][0] // ""')
             test -n "$asset"
             npm run registry:intake -- "$asset" registry.json
           done
