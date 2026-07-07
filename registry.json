@@ -12,6 +12,20 @@
       ],
       "packageUrl": "https://github.com/CNyezi/shu-hosts-editor/releases/download/v0.1.0/plugin.pcp",
       "sha256": "82aefa25d5ebde8209cdec46a87a29a1a83d9c8c3610d18b68e093a7a64f26bf"
+    },
+    {
+      "id": "com.shu.translator",
+      "name": "翻译",
+      "version": "0.1.0",
+      "description": "微软引擎即时翻译，中英自动互判，可跳转 Bing/DeepL/Google 网页",
+      "permissions": [
+        "clipboard.read",
+        "clipboard.write",
+        "shell.openUrl",
+        "network"
+      ],
+      "packageUrl": "https://github.com/CNyezi/shu-translator/releases/download/v0.1.0/plugin.pcp",
+      "sha256": "4767960603770fb935026b2559a57519d22dd73c314c1a7f7bd731401bfc1b7e"
     }
   ]
 }
