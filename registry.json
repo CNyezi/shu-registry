@@ -1,4 +1,17 @@
 {
   "version": 1,
-  "plugins": []
+  "plugins": [
+    {
+      "id": "com.shu.hosts-editor",
+      "name": "Hosts 编辑器",
+      "version": "0.1.0",
+      "description": "编辑 /etc/hosts，保存时通过系统管理员授权写入",
+      "permissions": [
+        "hosts.read",
+        "hosts.write"
+      ],
+      "packageUrl": "https://github.com/CNyezi/shu-hosts-editor/releases/download/v0.1.0/plugin.pcp",
+      "sha256": "82aefa25d5ebde8209cdec46a87a29a1a83d9c8c3610d18b68e093a7a64f26bf"
+    }
+  ]
 }
