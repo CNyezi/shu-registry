@@ -14,6 +14,23 @@
       "sha256": "82aefa25d5ebde8209cdec46a87a29a1a83d9c8c3610d18b68e093a7a64f26bf"
     },
     {
+      "id": "com.shu.image-compressor",
+      "name": "图片压缩",
+      "version": "0.1.0",
+      "description": "TinyPNG 式 PNG 有损压缩，识别剪贴板图片，质量可调，覆盖源文件或另存为",
+      "permissions": [
+        "clipboard.readImage",
+        "clipboard.readFiles",
+        "image.compress",
+        "image.preview",
+        "image.read",
+        "dialog.saveFile",
+        "dialog.saveFiles"
+      ],
+      "packageUrl": "https://github.com/CNyezi/shu-image-compressor/releases/download/v0.1.0/plugin.pcp",
+      "sha256": "4817457185a70ae20277fd1b43973ca0127fecb7b311a9e2c2a6d8162a55647a"
+    },
+    {
       "id": "com.shu.translator",
       "name": "翻译",
       "version": "0.1.0",
